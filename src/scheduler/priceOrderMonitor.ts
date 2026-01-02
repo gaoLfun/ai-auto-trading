@@ -877,8 +877,10 @@ export class PriceOrderMonitor {
         
         // 🔧 关键修复：只查询最近5分钟的交易，避免查询范围过大导致性能问题
         // 条件单触发到系统检测通常不会超过5分钟
-        const searchWindowMs = 5 * 60 * 1000; // 5分钟
-        const searchStartTime = Math.max(currentTime - searchWindowMs, orderCreateTime - 5000);
+        const searchWindowMs = 60 * 60 * 1000; // 1小时
+        // const searchWindowMs = 5 * 60 * 1000; // 5分钟
+        // const searchStartTime = Math.max(currentTime - searchWindowMs, orderCreateTime - 5000);
+        const searchStartTime =  orderCreateTime - searchWindowMs;
         
         trades = await this.exchangeClient.getMyTrades(contract, 500, searchStartTime);
         
